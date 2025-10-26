@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#2256a3">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="مدير المهام">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="مدير المهام">
+  
+  <!-- PWA Icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='48' fill='%232256a3'/><text x='96' y='120' font-family='Arial' font-size='80' text-anchor='middle' fill='white'>📋</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='48' fill='%232256a3'/><text x='96' y='120' font-family='Arial' font-size='80' text-anchor='middle' fill='white'>📋</text></svg>">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Cairo', Arial, sans-serif;
+      background: linear-gradient(180deg, #c2e9fb 0%, #f1f1f1 50%, #d4c1ec 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      color: #222;
+      font-weight: 700;
+    }
+    .btn {
+      width: 100%;
+      padding: 20px 0;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #fff;
+      transition: box-shadow 0.2s, background 0.3s;
+      font-family: inherit;
+      box-shadow: 0 4px 16px rgba(34,86,163,0.10);
+    }
+    .btn-blue {
+      background: linear-gradient(135deg, #2256a3 0%, #1a417a 100%);
+      box-shadow: 0 4px 20px rgba(34, 86, 163, 0.18);
+    }
+    .btn-blue:hover {
+      background: linear-gradient(135deg, #1a417a 0%, #143566 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(34, 86, 163, 0.22);
+    }
+    .btn-blue:active {
+      transform: translateY(0);
+    }
+    .modal-field {
+      padding: 18px;
+      font-size: 1.2rem;
+      border: 2px solid #2256a3;
+      border-radius: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      background: #f8f9ff;
+      box-shadow: 0 2px 12px rgba(34,86,163,0.07);
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .modal-field:focus {
+      border-color: #1a417a;
+      box-shadow: 0 2px 16px rgba(34,86,163,0.13);
+      outline: none;
+    }
+    #celebrate {
+      display:none;
+      margin-top:30px;
+      font-size:1.5rem;
+      color:#4caf50;
+      font-weight:bold;
+    }
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .container {
+        max-width: 95vw;
+      }
+      .btn {
+        font-size: 1rem;
+        padding: 16px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>أدخل اسمك</h1>
+    <input type="text" id="usernameInput" class="modal-field" placeholder="اكتب اسمك هنا...">
+    <button class="btn btn-blue" id="loginBtn">تسجيل دخول</button>
+    <div id="celebrate">🎉 تم تسجيل الدخول بنجاح! 🎉</div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+  <script>
+    // إعداد Supabase
+    const supabaseUrl = 'https://uxdzsvomlbyntpehhsgq.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4ZHpzdm9tbGJ5bnRwZWhoc2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NjgzMzksImV4cCI6MjA3NzA0NDMzOX0.eIo--ILR-KeoSgVYMLWukXcmWeIv4JBmDyoFn4CqPkI';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    $(function() {
+      $('#loginBtn').on('click', async function() {
+        const name = $('#usernameInput').val().trim();
+        if (!name) {
+          alert('يرجى إدخال اسمك أولاً!');
+          return;
+        }
+        // تحقق إذا كان المستخدم موجود
+        const { data: user, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('name', name)
+          .single();
+        if (user) {
+          // حفظ الاسم في localStorage
+          localStorage.setItem('username', name);
+          $('#celebrate').fadeIn(400);
+          setTimeout(function() {
+            window.location.href = 'home.html';
+          }, 1200);
+        } else {
+          // أضف المستخدم
+          const { data, error: insertError } = await supabase
+            .from('users')
+            .insert([{ name }]);
+          if (insertError) {
+            alert('حدث خطأ أثناء إضافة المستخدم: ' + insertError.message);
+            return;
+          }
+          localStorage.setItem('username', name);
+          $('#celebrate').fadeIn(400);
+          setTimeout(function() {
+            window.location.href = 'home.html';
+          }, 1200);
+        }
+      });
+
+      // PWA Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
