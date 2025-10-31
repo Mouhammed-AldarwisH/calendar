@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الصفحة الرئيسية</title>
@@ -31,8 +31,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 24px 0 64px 0;
             min-height: 100vh;
+            text-align: center;
         }
         
         .add-btn {
@@ -101,12 +103,15 @@
             width: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 24px;
             position: relative;
             transform: scale(0.9) translateY(20px);
             transition: all 0.3s ease;
             border: 1px solid rgba(34, 86, 163, 0.1);
             z-index: 101; /* تأكد أن المودال فوق كل شيء */
+            margin: 0 auto;
+            text-align: center;
         }
         
         .modal-bg.active .modal {
@@ -254,6 +259,8 @@
             gap: 32px 24px;
             width: 100%;
             max-width: 400px;
+            margin: 100px auto 0 auto;
+            justify-items: center;
         }
         
         .card {
@@ -266,6 +273,9 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            text-align: center;
+            align-items: center;
+            width: 100%;
         }
         
         .card.green { background: #5fc86c; }
@@ -355,6 +365,10 @@
             font-size: 1.2rem;
             color: #2256a3;
             font-weight: bold;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         @media (max-width: 500px) {
@@ -399,7 +413,7 @@
                 </div>
             </form>
         </div>
-        <div class="cards" style="margin-top: 100px;" id="cardsContainer">
+        <div class="cards" id="cardsContainer">
             <!-- سيتم تعبئة البطاقات ديناميكياً -->
         </div>
         <div class="tasks-left" id="tasksLeft">عدد المهام المتبقية: 0</div>
